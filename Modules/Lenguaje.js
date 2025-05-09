@@ -13,6 +13,15 @@ class Lenguaje {
       throw new Error("Error al obtener los lenguajes");
     }
   }
+
+  async getById(id) {
+    try {
+      const [row] = await connection.query("SELECT * FROM lenguajes WHERE id = ?", [id]);
+      return row;
+    } catch (error) {
+      throw new Error("Error al obtener lenguaje");
+    }
+  }
 }
 
 export default Lenguaje;
