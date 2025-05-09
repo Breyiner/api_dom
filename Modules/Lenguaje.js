@@ -6,21 +6,33 @@ class Lenguaje {
    * @returns {Array} Listado de los lenguajes en un arreglo
    */
   async getAll() {
-    try {
-      const [rows] = await connection.query("SELECT * FROM lenguajes");
-      return rows;
-    } catch (error) {
-      throw new Error("Error al obtener los lenguajes");
-    }
+    const [rows] = await connection.query("SELECT * FROM lenguajes");
+    return rows;
   }
 
   async getById(id) {
-    try {
-      const [row] = await connection.query("SELECT * FROM lenguajes WHERE id = ?", [id]);
-      return row;
-    } catch (error) {
-      throw new Error("Error al obtener lenguaje");
-    }
+    const [row] = await connection.query("SELECT * FROM lenguajes WHERE id = ?", [id]);
+    return row;
+  }
+
+  async create(lenguaje) {
+    const [result] = await connection.query("INSERT INTO lenguajes (lenguaje) VALUES (?)", [lenguaje]);
+    return result;
+  }
+
+  async update(id, lenguaje) {
+    const [result] = await connection.query("UPDATE lenguajes SET lenguaje = ? WHERE id = ?", [lenguaje, id]);
+    return result;
+  }
+
+  async partialUpdate(id, comando) {
+    const [result] = await connection.query(`UPDATE lenguajes SET ${comando} WHERE id = ?`, [id]);
+    return result;
+  }
+
+  async delete(id) {
+    const [result] = await connection.query("DELETE FROM lenguajes WHERE id = ?", [id]);
+    return result;
   }
 }
 
