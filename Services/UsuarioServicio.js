@@ -25,13 +25,13 @@ class UsuarioServicio {
     async getById(id) {
         try {
             const usuario = await this.OBJUsuario.getById(id);
+            if (usuario.length === 0) throw new Error("No existe el usuario.");
             const {id_ciudad, id_genero} = usuario[0];
             
             const ciudad = await this.OBJCiudadServicio.getById(id_ciudad);
             const genero = await this.OBJGeneroServicio.getById(id_genero);
 
-            if (usuario.length === 0) throw new Error("No existe el usuario.");
-
+            
             return {
                 ...usuario[0],
                 ciudad: ciudad[0].ciudad,
@@ -46,8 +46,9 @@ class UsuarioServicio {
 
     async validarExistencia(campos) {
         const {id_genero, id_ciudad} = campos;
-        await this.OBJGeneroServicio.getById(id_genero);
-        await this.OBJCiudadServicio.getById(id_ciudad);
+
+        if(id_genero) await this.OBJGeneroServicio.getById(id_genero);
+        if(id_ciudad) await this.OBJCiudadServicio.getById(id_ciudad);
     }
     
     async create(campos) {
